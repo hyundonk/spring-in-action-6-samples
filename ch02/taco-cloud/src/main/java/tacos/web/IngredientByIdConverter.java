@@ -1,17 +1,27 @@
 package tacos.web;
 
-import java.util.HashMap;
-import java.util.Map;
+//import java.util.HashMap;
+//import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
 import tacos.Ingredient;
-import tacos.Ingredient.Type;
+//import tacos.Ingredient.Type;
+import tacos.data.IngredientRepository;
 
 @Component
 public class IngredientByIdConverter implements Converter<String, Ingredient> {
 
+  private IngredientRepository ingredientRepo;
+
+  @Autowired
+  public IngredientByIdConverter(IngredientRepository ingredientRepo){
+    this.ingredientRepo = ingredientRepo;
+  }
+
+  /*
   private Map<String, Ingredient> ingredientMap = new HashMap<>();
   
   public IngredientByIdConverter() {
@@ -36,10 +46,10 @@ public class IngredientByIdConverter implements Converter<String, Ingredient> {
     ingredientMap.put("SRCR", 
         new Ingredient("SRCR", "Sour Cream", Type.SAUCE));
   }
-  
+  */
   @Override
   public Ingredient convert(String id) {
-    return ingredientMap.get(id);
+    return ingredientRepo.findById(id).orElse(null);
   }
 
 }
